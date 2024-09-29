@@ -66,8 +66,7 @@ int Polynomial::degree() const {
 Polynomial Polynomial::redegree(int degree) const {
     if (*this == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\redegree(int)";
-    }
-    if (degree < 0) {
+    } else if (degree < 0) {
         throw "Maths\\Polynomial\\redegree(int)\\degree";
     }
     vector<Element> new_coefficients(degree + 1, this->field->zero_element());
@@ -90,11 +89,9 @@ Polynomial Polynomial::align() const {
 Polynomial Polynomial::operator+(const Polynomial& polynomial) const {
     if (*this == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator+(const Polynomial&)";
-    }
-    if (polynomial == polynomials::default_polynomial) {
+    } else if (polynomial == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator+(const Polynomial&)\\polynomial";
-    }
-    if (*polynomial.field != *this->field) {
+    } else if (*polynomial.field != *this->field) {
         throw "Maths\\Polynomial\\operator+(const Polynomial&)\\polynomial\\field";
     }
     int new_degree = max(this->degree(), polynomial.degree());
@@ -110,11 +107,9 @@ Polynomial Polynomial::operator+(const Polynomial& polynomial) const {
 Polynomial Polynomial::operator*(const Polynomial& polynomial) const {
     if (*this == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator*(const Polynomial&)";
-    }
-    if (polynomial == polynomials::default_polynomial) {
+    } else if (polynomial == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator*(const Polynomial&)\\polynomial";
-    }
-    if (polynomial.field != this->field) {
+    } else if (polynomial.field != this->field) {
         throw "Maths\\Polynomial\\operator*(const Polynomial&)\\polynomial\\field";
     }
     int new_degree = this->degree() + polynomial.degree();
@@ -132,11 +127,9 @@ Polynomial Polynomial::operator*(const Polynomial& polynomial) const {
 Polynomial Polynomial::operator/(const Polynomial& polynomial) const {
     if (*this == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator/(const Polynomial&)";
-    }
-    if (polynomial == polynomials::default_polynomial) {
+    } else if (polynomial == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator/(const Polynomial&)\\polynomial";
-    }
-    if (polynomial.field != this->field) {
+    } else if (polynomial.field != this->field) {
         throw "Maths\\Polynomial\\operator/(const Polynomial&)\\polynomial\\field";
     }
     int new_degree = this->degree() - polynomial.degree();
@@ -168,11 +161,9 @@ Polynomial Polynomial::operator-() const {
 Polynomial Polynomial::operator-(const Polynomial& polynomial) const {
     if (*this == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator-(const Polynomial&)";
-    }
-    if (polynomial == polynomials::default_polynomial) {
+    } else if (polynomial == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator-(const Polynomial&)\\polynomial";
-    }
-    if (polynomial.field != this->field) {
+    } else if (polynomial.field != this->field) {
         throw "Maths\\Polynomial\\operator-(const Polynomial&)\\polynomial\\field";
     }
     return (*this) + (-polynomial);
@@ -181,16 +172,55 @@ Polynomial Polynomial::operator-(const Polynomial& polynomial) const {
 Polynomial Polynomial::operator%(const Polynomial& polynomial) const {
     if (*this == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator%(const Polynomial&)";
-    }
-    if (polynomial == polynomials::default_polynomial) {
+    } else if (polynomial == polynomials::default_polynomial) {
         throw "Maths\\Polynomial\\operator%(const Polynomial&)\\polynomial";
-    }
-    if (polynomial.field != this->field) {
+    } else if (polynomial.field != this->field) {
         throw "Maths\\Polynomial\\operator%(const Polynomial&)\\polynomial\\field";
     }
     int new_degree = polynomial.degree() - 1;
     if (new_degree < 0) return Polynomial(this->field, {this->field->zero_element()});
     return (*this - (polynomial * (*this / polynomial))).redegree(new_degree);
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+Polynomial Polynomial::operator*(const Element& scalar) const {
+    if (*this == polynomials::default_polynomial) {
+        throw "Maths\\Polynomial\\operator*(const Element&)";
+    } else if (scalar.field != this->field) {
+        throw "Maths\\Polynomial\\operator*(const Element&)\\scalar\\field";
+    }
+    int new_degree = this->degree();
+    vector<Element> new_coefficients(new_degree + 1, this->field->zero_element());
+    for (int i = 0; i <= new_degree; i ++) {
+        new_coefficients[i] = this->coefficients[i] * scalar;
+    }
+    return Polynomial(this->field, new_coefficients);
+}
+
+Element Polynomial::evaluate(const Element& argument) const {
+    if (*this == polynomials::default_polynomial) {
+        throw "Maths\\Polynomial\\evaluate()";
+    } else if (argument.field != this->field) {
+        throw "Maths\\Polynomial\\evaluate()\\argument\\field";
+    }
+    Element new_element = this->field->zero_element();
+    for (int i = 0; i <= this->degree(); i ++) {
+        new_element = new_element + (this->coefficients[i] ^ i);
+    }
+    return new_element;
+}
+
+Polynomial Polynomial::derivative() const {
+    if (*this == polynomials::default_polynomial) {
+        throw "Maths\\Polynomial\\derivative()";
+    }
+    int new_degree = this->degree() - 1;
+    vector<Element> new_coefficients(new_degree + 1, this->field->zero_element());
+    for (int i = 0; i <= new_degree; i ++) {
+        new_coefficients[i] = (this->coefficients[i + 1] * (i + 1));
+    }
+    return Polynomial(this->field, new_coefficients);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

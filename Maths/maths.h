@@ -39,7 +39,7 @@ class Polynomial {
     bool operator==(const Polynomial& polynomial) const;
     bool operator!=(const Polynomial& polynomial) const;
     Polynomial operator-() const;
-    Polynomial operator*(Element scalar) const;
+    Polynomial operator*(const Element& scalar) const;
     Polynomial operator+(const Polynomial& polynomial) const;
     Polynomial operator-(const Polynomial& polynomial) const;
     Polynomial operator*(const Polynomial& polynomial) const;
@@ -50,7 +50,9 @@ class Polynomial {
     int degree() const;
     Polynomial redegree(int degree) const;
     Polynomial align() const;
-    Element evaluate(Element argument) const;
+
+    public:
+    Element evaluate(const Element& argument) const;
     Polynomial derivative() const;
 };
 
@@ -62,48 +64,42 @@ namespace polynomials {
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// class Matrix {
-//     public:
-//     Field* field;
-//     vector<vector<Element>> elements;
+class Matrix {
+    public:
+    Field* field;
+    vector<vector<Element>> elements;
 
-//     public:
-//     Matrix();
-//     Matrix(Field* field, vector<vector<Element>> elements);
-//     ~Matrix() = default;
+    public:
+    Matrix() = delete;
+    Matrix(Field* field, vector<vector<Element>> elements);
+    ~Matrix() = default;
 
-//     public:
-//     bool operator==(const Matrix& matrix) const;
-//     bool operator!=(const Matrix& matrix) const;
-//     Matrix operator-() const;
-//     Matrix operator~() const;
-//     Matrix operator*(Element scalar) const;
-//     Matrix operator+(const Matrix& matrix) const;
-//     Matrix operator-(const Matrix& matrix) const;
-//     Matrix operator*(const Matrix& matrix) const;
-//     Matrix operator/(const Matrix& matrix) const;
+    public:
+    bool operator==(const Matrix& matrix) const;
+    bool operator!=(const Matrix& matrix) const;
+    Matrix operator-() const;
+    Matrix operator~() const;
+    Matrix operator*(const Element& scalar) const;
+    Matrix operator+(const Matrix& matrix) const;
+    Matrix operator-(const Matrix& matrix) const;
+    Matrix operator*(const Matrix& matrix) const;
 
-//     public:
-//     int row() const;
-//     int column() const;
-//     int size() const;
-//     Matrix resize(int row, int column) const;
+    public:
+    int row() const;
+    int column() const;
+    Matrix resize(int row, int column) const;
 
-//     public:
-//     Matrix transpose() const;
-//     Element determinant() const;
-// };
+    public:
+    Matrix transpose() const;
+    Element determinant() const;
+};
 
-// ostream& operator<<(ostream& output, const Matrix& matrix);
-
-// namespace matrices {
-//     static Matrix default_matrix;
-// }
+ostream& operator<<(ostream& output, const Matrix& matrix);
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #include "../FFA/ffa.h"
-// #include "matrix.cpp"
+#include "matrix.cpp"
 #include "polynomial.cpp"
 
 #endif
