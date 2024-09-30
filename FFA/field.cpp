@@ -49,6 +49,13 @@ Field::Field(Polynomial* primitive_polynomial) {
     for (int i = 2; i < temp_0_size - 1; i ++) {
         this->general_elements[i] = (this->primitive_element() ^ i);
     }
+    for (int i = 0; i < temp_0_size; i ++) {
+        for (int j = i + 1; j < temp_0_size; j ++) {
+            if (this->general_elements[i] == this->general_elements[j]) {
+                throw "FFA\\Field\\Field(Polynomial*)";
+            }
+        }
+    }
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////

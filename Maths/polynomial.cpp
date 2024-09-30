@@ -206,7 +206,7 @@ Element Polynomial::evaluate(const Element& argument) const {
     }
     Element new_element = this->field->zero_element();
     for (int i = 0; i <= this->degree(); i ++) {
-        new_element = new_element + (this->coefficients[i] ^ i);
+        new_element = new_element + (this->coefficients[i] * (argument ^ i));
     }
     return new_element;
 }

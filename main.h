@@ -13,6 +13,7 @@
 #include <iostream>
 #include <string>
 
+#include "FEC/fec.h"
 #include "FFA/ffa.h"
 #include "Maths/maths.h"
 
